@@ -16,6 +16,6 @@
 
                              Cointopay                                    
 
-7:- click on Play icon to install and edit icon to configur.
+7:- click on Play icon to install and edit icon to configure.
 
                              DONE                                                                           
