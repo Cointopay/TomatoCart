@@ -101,6 +101,7 @@
     $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('MERCAHNT ID', 'MODULE_PAYMENT_cointopay_SELLER_ID', '', 'Your Cointopay Merchant ID.', '6', '0', now())");
    
     $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('SECURITY CODE', 'MODULE_PAYMENT_cointopay_SECRET_WORD', '', 'The Security Code you set on the Cointopay Site Management page.', '6', '0', now())");
+	$osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('API KEY', 'MODULE_PAYMENT_cointopay_API_KEY', '', 'The Api Key you set on the Cointopay Site Management page.', '6', '0', now())");
     $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort order of display.', 'MODULE_PAYMENT_cointopay_SORT_ORDER', '0', 'Sort order of display. Lowest is displayed first.', '6', '1', now())");
   }
 
@@ -116,6 +117,7 @@
       $this->_keys = array('MODULE_PAYMENT_cointopay_STATUS',
                            'MODULE_PAYMENT_cointopay_SELLER_ID',
                            'MODULE_PAYMENT_cointopay_SECRET_WORD',
+						   'MODULE_PAYMENT_cointopay_API_KEY',
                            'MODULE_PAYMENT_cointopay_SORT_ORDER');
     }
   

@@ -43,6 +43,9 @@
         );
         $redirect = curl_exec($ch);
         $results = json_decode($redirect);
+		if (is_string($results)){
+				echo $results;exit;
+		}
         if($results->RedirectURL)
         {
            //fn_create_payment_form($results->RedirectURL, '', 'Cointopay', false);

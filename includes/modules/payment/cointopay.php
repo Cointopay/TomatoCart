@@ -112,6 +112,18 @@
                         'TransactionID' => $_GET['TransactionID'] ,
                         'ConfirmCode' => $_GET['ConfirmCode'] 
                     ];
+			$transactionData = $this->getTransactiondetail($data);
+			if(200 !== $transactionData['status_code']){
+				echo $transactionData['message'];
+                exit;
+			}
+			$value_data = "MerchantID=" . $transactionData['data']['MerchantID'] . "&AltCoinID=" . $transactionData['data']['AltCoinID'] . "&TransactionID=" . $_GET['TransactionID'] . "&coinAddress=" . $transactionData['data']['coinAddress'] . "&CustomerReferenceNr=" . 
+	$_GET['CustomerReferenceNr'] . "&SecurityCode=" . $transactionData['data']['SecurityCode'] . "&inputCurrency=" . $transactionData['data']['inputCurrency'];
+			$ConfirmCode = $this->calculateRFC2104HMAC(MODULE_PAYMENT_cointopay_API_KEY, $value_data);
+			if($ConfirmCode !== $_GET['ConfirmCode']){
+				echo "Data mismatch! Data doesn\'t match with Cointopay.";
+                exit;
+			}
             $response = $this->validateOrder($data);
        
             if($response->Status !== $_GET['status'])
@@ -241,6 +253,34 @@
        // give return value
        return $base_url;
        }
+	   function getTransactiondetail($data) {
+        $validate = true;
+
+        $confirm_code = $data['ConfirmCode'];
+        $url = "https://cointopay.com/v2REAPI?Call=Transactiondetail&MerchantID=".$data['mid']."&output=json&ConfirmCode=".$confirm_code."&APIKey=a";
+        $curl = curl_init($url);
+        curl_setopt_array($curl, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_SSL_VERIFYPEER => 0
+        ));
+        $result = curl_exec($curl);
+        $result = json_decode($result, true);
+        if(!$result || !is_array($result)) {
+            $validate = false;
+        }
+		else{
+			return $result;
+		}
+    }
+	function calculateRFC2104HMAC ($key, $data)
+	{
+		$s = hash_hmac('sha256', $data, $key, true);
+
+		return strtoupper($this->base64url_encode($s));
+	}
+	function base64url_encode($data) {
+    return strtoupper(rtrim(strtr(base64_encode($data), '+/', '-_'), '='));
+    }
   }
 
   //http://localhost/tomato/checkout.php?process=true&CustomerReferenceNr=29&TransactionID=231327&status=waiting&notenough=0&ConfirmCode=-QFPEQM-BJWWU8SKBAOBB5RX_CIIZSZ0VYTP9SZKTCS&AltCoinID=1&MerchantID=14351&CoinAddressUsed=3C9fxEdTLmhYZZkCDhy5xuumWzc3v24JCB&SecurityCode=-903575721&inputCurrency=USD
